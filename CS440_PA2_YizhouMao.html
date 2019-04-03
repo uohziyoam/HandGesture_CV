@@ -1,0 +1,329 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title> CS440 Homework PA2 Yizhou Mao </title>
+    <style>
+        < !-- body {
+            font-family: 'Trebuchet MS', Verdana;
+        }
+
+        p {
+            font-family: 'Trebuchet MS', Times;
+            font-size: 20px;
+            margin: 10px 10px 15px 20px;
+        }
+
+        h3 {
+            margin: 5px;
+        }
+
+        h2 {
+            margin: 10px;
+        }
+
+        h1 {
+            margin: 10px 0px 0px 20px;
+        }
+
+        div.main-body {
+            align: center;
+            margin: 30px;
+        }
+
+        hr {
+            margin: 20px 0px 20px 0px;
+        }
+
+        #title {
+            padding-left: 165px;
+        }
+
+
+        img {
+            width: auto;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+    </style>
+</head>
+
+<body>
+    <center>
+        <a href="http://www.bu.edu/"><img border="0" src="./bu-logo.gif" width="119" height="120"></a>
+    </center>
+
+    <h1>Introduction to Computational Vision</h1>
+    <p>
+        CS 440/640 Programming Assignment 2 <br>
+        Yizhou Mao <br>
+        Jinshu Yang <br>
+        04/01/2019 <br>
+    </p>
+
+    <div class="main-body">
+        <hr>
+        <h2> Problem Definition </h2>
+        <p>
+            In this assignment, it is required to design and implement algorithms that recognize at least three hand shapes in a video stream
+        </p>
+        <hr>
+
+        <h2> Experiments </h2>
+        <p>
+            In this assignment, we implement algorithms to recognize hand gestures in video stream. The following are the hand shapes that our algorithm can recognize:
+
+        </p>
+
+        <p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td id="title"> Paper </td>
+                        <td id="title"> Rock </td>
+                        <td id="title"> Up </td>
+                        <td id="title"> Scissor </td>
+                    </tr>
+                    <tr>
+                        <td height="300" style="padding-right: 70px"> <img src="./palm_jessy.jpg"> </td>
+                        <td height="300" style="padding-right: 70px"> <img src="./rock_jessy.jpg"> </td>
+                        <td height="300" style="padding-right: 70px"> <img src="./up_jessy.jpg"> </td>
+                        <td height="300"> <img src="./yeah_jessy.jpg"> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+
+
+        <hr>
+        <h2> Results </h2>
+        <p>
+            List your experimental results. Provide examples of input images and output
+            images. If relevant, you may provide images showing any intermediate steps. If
+            your work involves videos, do not submit the videos but only links to them.
+        </p>
+
+        <p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td colspan="3">
+                            <center>
+                                <h3>
+                                    Result
+                                </h3>
+                            </center>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td> <img src="./result/result_palm.png"> </td>
+                        <td> <img src="./result/result_rock.png"> </td>
+                        <td> <img src="./result/result_scissor.png"> </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </p>
+
+
+
+        <hr>
+        <h2> Discussion </h2>
+
+        <p>
+            Discuss your method and results:
+        </p>
+
+        <ul>
+
+            <li>
+                Details about the pre-processing, recognition, and post-processing steps implemented in your system.
+            </li>
+
+
+            <h3>Pre-processing: </h3>
+            <p>
+                After we generate the template, we need to preprocess each frame with a hand shape. The process will be similar with the steps above. First, we use the same skin-detect algorithm to extract the hand shape, remove noise by thresholding and blurred for a more generic hand shape. Then we convert it to grayscale (in our skin-detect algorithm, we use GaussianBlur to convert the image to only contains white and black color to achieve a more general result. Finally, we rescale the image into a smaller image to both blur it and make the size smaller for running the algorithm in a faster speed (efficiency).
+            </p>
+
+            <h3>Recognition(Template Matching): </h3>
+            <p>
+                We put all the templates in an array. Then we use the built-in method matchTemplate to compare each template and the source image by sliding the template and find similar targets on the source image. For templateMatching, we use SQDIFF-NORMED so we need to find the min_val. We compare the min_val we got from the each template and find the smallest min_val. This corresponding template will be the gesture that has been recoginized.
+            </p>
+
+            <h3>Post-Processing: </h3>
+            <p>
+                For each frame with a hand shape, after we finished template Matching, we use getContour method to draw the general contour for the hand shape and post text on the screen to show which hand gesture it is. We also draw the centroid of the hand contour and post its position on the screen.
+            </p>
+        </ul>
+
+        <ul>
+            <li>
+                Statistics of detection results, including a confusion matrix, and precision, recall, and F-1 scores.
+            </li>
+
+            <h3>Confusion matrix: </h3>
+
+
+            <p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td> <img src="confusion_matrix/confusion_matrix.png"> </td>
+                            <td> <img src="confusion_matrix/actual_confusion_matrix.png"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+
+            <p>
+
+
+            </p>
+
+            <h3>Precision: </h3>
+            <p><i>precision</i><SUB>rock</SUB> = 12/(12 + 4 + 4 + 0) = 3/5 = 0.6</p>
+            <p><i>precision</i><SUB>scissor</SUB> = 15/(15 + 2 + 0 + 0) = 15/17 = 0.882</p>
+            <p><i>precision</i><SUB>paper</SUB> = 14/(14 + 1 + 0 + 0) = 14/15 = 0.933</p>
+            <p><i>precision</i><SUB>none</SUB> = 20/(20 + 0 + 0 + 8) = 5/7 = 0.714</p>
+            <p><b><i>precision</i><SUB>general</SUB> = (0.6 + 0.882 + 0.933 + 0.714)/4 = 0.782</b></p>
+
+            <h3>Recall: </h3>
+            <p><i>recall</i><SUB>rock</SUB> = 12/(12 + 0 + 0 + 8) = 3/5 = 0.6</p>
+            <p><i>recall</i><SUB>scissor</SUB> = 15/(15 + 4 + 1 + 0) = 3/4 = 0.75</p>
+            <p><i>recall</i><SUB>paper</SUB> = 14/(14 + 4 + 2 + 0) = 7/10 = 0.7</p>
+            <p><i>recall</i><SUB>none</SUB> = 20/(20 + 0 + 0 + 0) = 20/20 = 1</p>
+
+            <p><b><i>recall</i><SUB>general</SUB> = (0.6 + 0.75 + 0.7 + 1)/4 = 0.763</b></p>
+
+            <h3>F-1 scores: </h3>
+            <p><b><i>F</i><SUB>1</SUB> = 2 * (0.782 * 0.763)/(0.782 + 0.763) = 0.772</b></p>
+        </ul>
+
+        <ul>
+            <li>
+                Two graphical displays, one success and one failure, for each type of gestures detection. In addition, a brief explanation should be attached to each pair of images.
+            </li>
+
+
+            <p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td id="title"> Success RGB </td>
+                            <td id="title"> Success BW </td>
+                            <td id="title"> Failure RGB </td>
+                            <td id="title"> Failure BW </td>
+                        </tr>
+                        <tr>
+                            <td> <img src="./Contrast/Success/palm.png"> </td>
+                            <td> <img src="./Contrast/Success/palm_bw.png"> </td>
+                            <td> <img src="./Contrast/Failure/palm.png"> </td>
+                            <td> <img src="./Contrast/Failure/palm_bw.png"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+
+            <p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td id="title"> Success RGB </td>
+                            <td id="title"> Success BW </td>
+                            <td id="title"> Failure RGB </td>
+                            <td id="title"> Failure BW </td>
+                        </tr>
+                        <tr>
+                            <td> <img src="./Contrast/Success/rock.png"> </td>
+                            <td> <img src="./Contrast/Success/rock_bw.png"> </td>
+                            <td> <img src="./Contrast/Failure/rock.png"> </td>
+                            <td> <img src="./Contrast/Failure/rock_bw.png"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+
+            <p>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td id="title"> Success RGB </td>
+                            <td id="title"> Success BW </td>
+                            <td id="title"> Failure RGB </td>
+                            <td id="title"> Failure BW </td>
+                        </tr>
+                        <tr>
+                            <td> <img src="./Contrast/Success/yeah.png"> </td>
+                            <td> <img src="./Contrast/Success/yeah_bw.png"> </td>
+                            <td> <img src="./Contrast/Failure/yeah.png"> </td>
+                            <td> <img src="./Contrast/Failure/yeah_bw.png"> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </p>
+            <p>The graph shows two contrast detection of hand shape. The system failed to detect the shape of palm because the graph clearly tells that the failure shape of hand actually have occupied the similar shape of pixels in each frame. A very import factor that may affect the accuracy of detecting system is the gesture in front of the camera. The closed palm is easily identified as rock. There is no need to explain the successful detection of palm shape which in this case the text "open" indicated in the graph.</p>
+
+            <li>
+                Other methods
+            </li>
+
+
+            <h3>Template Generation: </h3>
+            <p>
+                First, we need to generate templates for the hand shapes that we are going to recognize later. We first use the skin-detect algorithm that we implement to extract the hand shape in each image by only using the area inside the largest contour. Then we removed noise by thresholding and blurred for a more generic hand shape. Finally, we converted to the hand image to grayscale.
+            </p>
+
+            <h3>Frame-to-Frame Difference and Motion Energy Templates: </h3>
+            <p>
+                In this assignment, we also implement frame-to-frame difference to show the motion energy. For frame-to-frame difference, we have the current frame and the last frame, we calculate the difference of the same pixels on two frames. If there is a difference, then we recognize it as in motion and convert it to white. Or we will recognize it as part of the background and convert it to black. For Motion Energy, we have a sliding window of size 3 which means that we will detect and present the motion in the latest 3 frames. In order to achieve that, we first initialize a queue with three black images. While the camera is on, we keep adding new frame into the queue and pop up old frame out of the queue. During this process, we use a for loop to iterate each frame in the queue to compare the difference of the pixels. If we recognize the pixel is “in motion”, then we convert it to white. If the pixels is not moved in the three frame, we will convert it to black.
+            </p>
+        </ul>
+
+
+        <hr>
+        <h2> Additional Interesting Usage </h2>
+
+        <p>
+            By connecting the weChat API, the program can have the ability to send message from the OS to weChat APP. It requires an additional single-board computer raspberry pi to play the role of camera. Once it detects someone is waving his hand, then it will call the weChat API and send message to the person who own it. It should looks like this:
+        </p>
+
+
+        <p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td height="300" style="padding-right: 70px"> <img src="./wave_hand.gif"> </td>
+                        <td height="500" style="padding-right: 70px"> <img src="./wechat_message.gif"> </td>
+                        <td height="250"> <img src="./raspberry.jpg"> </td>
+                    </tr>
+                </tbody>
+            </table>
+        </p>
+
+        <hr>
+        <h2> Conclusions </h2>
+
+        <p>
+            In general, the Computation Vision detecting system can have a fair acceptable experiment results.
+        </p>
+
+
+        <hr>
+        <h2> Credits and Bibliography </h2>
+        <p>[1] Heintz, Brenner. “Training a Neural Network to Detect Gestures with OpenCV in Python.” Towards Data Science, Towards Data Science, 17 Dec. 2018, towardsdatascience.com/training-a-neural-network-to-detect-gestures-with-opencv-in-python-e09b0a12bdf1.</p>
+        <p>[2] “Basic Motion Detection and Tracking with Python and OpenCV.” PyImageSearch, 5 Feb. 2019, www.pyimagesearch.com/2015/05/25/basic-motion-detection-and-tracking-with-python-and-opencv/.</p>
+        <p>[3] “Template Matching” Template Matching - OpenCV 2.4.13.7 Documentation, docs.opencv.org/2.4.13.7/doc/tutorials/imgproc/histograms/template_matching/template_matching.html.</p>
+
+        <hr>
+    </div>
+
+
+
+
+
+</body>
+
+</html>
